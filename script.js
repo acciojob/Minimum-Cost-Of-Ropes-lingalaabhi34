@@ -1,35 +1,26 @@
 function calculateMinCost() {
-  //your code here
-  let text = document.getElementById("rope-lengths").value;
-	if(!text){
-		return ;
-	}
-  let textArr = text.split(",");
-  let input = [];
-  for(let i of textArr){
-    input.push(parseInt(i));
+  const input = document.getElementById("rope-lengths").value;
+  const ropeLengths = input.split(",").map(Number);
+  if (ropeLengths.length < 2) {
+    document.getElementById("result").innerText =
+      "Please enter at least two rope lengths.";
+    return;
   }
-	input.sort((a,b)=>a-b);
-	let ans = [];
-	
-	
-	while(input.length!=1){
-		let x = input.shift();
-		let y =input.shift();
-		
-		ans.push(x+y);
-		input.push(x+y);
-		
-		input.sort((a,b)=>a-b);
-    
-	}
 
-	let total = 0;
-	for(let i of ans){
-		total += i;
-	}
-	
+  function minCostOfRopes(ropes) {
+    let totalCost = 0;
+    while (ropes.length > 1) {
+      ropes.sort((a, b) => a - b);
+      const combinedLength = ropes[0] + ropes[1];
+      totalCost += combinedLength;
+      ropes = [combinedLength, ...ropes.slice(2)];
+    }
+    return totalCost;
+  }
 
-	document.getElementById("result").textContent = total ;
-  
-}  
+  const minCost = minCostOfRopes(ropeLengths);
+
+  document.getElementById(
+    "result"
+  ).innerText = `Minimum cost of connecting ropes: ${minCost}`;
+}
